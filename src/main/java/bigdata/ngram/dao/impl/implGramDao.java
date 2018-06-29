@@ -1,45 +1,70 @@
 package bigdata.ngram.dao.impl;
 
 import bigdata.ngram.dao.GramDao;
-import lombok.Getter;
-import lombok.Setter;
+import org.apache.hadoop.hbase.client.Result;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.hadoop.hbase.HbaseTemplate;
+
+import java.sql.ResultSet;
 
 
 public class implGramDao implements GramDao {
 
     @Autowired private HbaseTemplate hbaseTemplate;
-    @Getter @Setter private int ngramNumber;
-    @Getter @Setter private String backoffHistory="";
-    private String history;
+    @Value("${highestOrder}") private int highestOrder;
+    private int ngramNumber=-1;
+    private String backoffHistory ="";
+    private double[] lambdas;
 
-    private String history_;
-    public void setHistory(String history) {
-        history_ = history.replaceAll("\\s+"," ");
-        while(backoffHistory=="" && history_!=null){
-            backoffHistory = hbaseTemplate.get(history_, "lambda", (result,rowNumber)->history_);
 
-            history_ = history_.substring(history_.indexOf(" ")+1);
-        }
 
+    public implGramDao(String history){
+        this.setBackoffHistory(history);
     }
 
 
+    private String history_;
+    public void setBackoffHistory(String history) {
+        history_ = history.trim().replaceAll("\\s+"," ");
+        int i=history_.split(" ").length;
+        while(this.backoffHistory =="" && history_!=null){
+            this.backoffHistory = hbaseTemplate.get("prob"+i,history_, (result, rowNumber)->history_);
+            history_ = history_.substring(history_.indexOf(" ")+1);
+            --i;
+        }
+        this.ngramNumber=this.backoffHistory.split(" ").length+1;
 
 
-    @Override
-    public String getLambda() {
-        hbaseTemplate.execute()
+    }
+
+    public void setLambdas(String backoffHistory) {
+        if (this.ngramNumber==-1){
+            return;
+        }
+        lambdas = new double[this.ngramNumber-1];
+        for (int i=0;i<this.ngramNumber;++i){
+            lambdas[i] = Double.parseDouble(
+                    hbaseTemplate.get(
+                            "prob"+i,backoffHistory,"lambda","lambda",(result, i1) -> result
+                    ).value().toString()
+            );
+        }
     }
 
     @Override
     public String[] getTopByNumber(int topK) {
-        return new String[0];
+        if (this.ngramNumber==-1){
+            return null;
+        }
+        String[] res = new String[topK];
+        for(int i=0;i<topK;++i){
+            res
+        }
     }
 
     @Override
-    public String[] getTopByProb(double totalProb) {
-        return new String[0];
+    public String[] getTopByProb(double totalProb,int limit) {
+        return new String[]{"adfadsf"};
     }
 }

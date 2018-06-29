@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:hdp="http://www.springframework.org/schema/hadoop"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+">
 
+    <bean id="appProperty"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <array>
+                <value>classpath:application.properties</value>
+            </array>
+        </property>
+    </bean>
+
+    <bean id="htemplate" class="org.springframework.data.hadoop.hbase.HbaseTemplate">
+        <property name="configuration" ref="hbaseConfiguration">
+        </property>
+    </bean>
+    <!-- 配置hadoop的基本信息 -->
+    <hdp:configuration>
+        fs.default.name="hdfs://192.168.0.173:8082"
+    </hdp:configuration>
+    <!-- 配置zookeeper地址和端口 -->
+    <hdp:hbase-configuration zk-quorum="192.168.0.173" zk-port="2181" />
 </beans>
