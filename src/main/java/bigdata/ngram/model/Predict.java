@@ -14,6 +14,11 @@ public class Predict {
 
     public Predict(Cell cell){
         this.following = CellUtil.cloneQualifier(cell).toString();
-        this.prob = Integer.parseInt(CellUtil.cloneValue(cell).toString());
+        this.prob = Double.parseDouble(CellUtil.cloneValue(cell).toString());
+    }
+
+    public Predict(String following,double prob){
+        this.following = following;
+        this.prob = prob;
     }
 }

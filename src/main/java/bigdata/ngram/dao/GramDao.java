@@ -1,12 +1,9 @@
 package bigdata.ngram.dao;
 
-import bigdata.ngram.model.Predict;
+import bigdata.ngram.model.Gram;
 
 public interface GramDao {
 
-    String[] getBackoffHistory(String history);
+    Gram getGram(String history,int limit);
 
-    Predict[] getTopByNumber(int topK);
-
-    Predict[] getTopByProb(double totalProb);
 }
