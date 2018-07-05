@@ -1,4 +1,5 @@
 package bigdata.ngram.service;
 
-public class GramService {
+public interface GramService {
+    String[] getPredict(String history);
 }

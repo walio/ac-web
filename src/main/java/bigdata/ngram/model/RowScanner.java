@@ -1,6 +1,5 @@
 package bigdata.ngram.model;
 
-import bigdata.ngram.model.Predict;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.hadoop.hbase.Cell;
@@ -14,6 +13,7 @@ import java.util.Stack;
 public class RowScanner {
     @Setter @Getter Result scanner;
     @Getter @Setter double lambda;
+    //stack is for cache
     @Getter private Stack<Predict> stack = new Stack<>();
 
     public Predict current(){
@@ -32,8 +32,8 @@ public class RowScanner {
         if (!stack.isEmpty()){
             stack.pop();
         }
-        Cell current = scanner.current();
-        stack.push(new Predict(CellUtil.cloneQualifier(current).toString(),lambda*Double.parseDouble(CellUtil.cloneValue(current).toString())));
+        String current = new String(CellUtil.cloneValue(scanner.current()));
+        stack.push(new Predict(current.split("=")[0],lambda*Double.parseDouble(current.split("=")[1])));
         return true;
     }
 

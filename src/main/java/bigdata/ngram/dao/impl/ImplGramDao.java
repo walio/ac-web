@@ -5,13 +5,20 @@ import bigdata.ngram.model.Gram;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.data.hadoop.hbase.HbaseTemplate;
 
 
 public class ImplGramDao implements GramDao {
 
-    @Autowired private HbaseTemplate hbaseTemplate;
+    //fixme: @Autowired get nullPointerException in unittest
+//    @Autowired private HbaseTemplate hbaseTemplate;
+    ApplicationContext context = new ClassPathXmlApplicationContext("classpath:application-context.xml");
+    HbaseTemplate hbaseTemplate = (HbaseTemplate) context.getBean("hbaseTemplate");
+
     @Getter @Setter private String history="";
+    private String aaa="adsf";
 
 
     private String history_;
@@ -20,7 +27,7 @@ public class ImplGramDao implements GramDao {
         int i = history_.split(" ").length;
         String backoffHistory="";
         while (backoffHistory == "" && history_ != null) {
-            backoffHistory = hbaseTemplate.get("prob" + i, history_, (result, rowNumber) -> history_);
+            backoffHistory = hbaseTemplate.get("order" + i, history_, (result, rowNumber) -> history_);
             history_ = history_.substring(history_.indexOf(" ") + 1);
             --i;
         }
@@ -28,7 +35,10 @@ public class ImplGramDao implements GramDao {
     }
 
     public void test(){
-        hbaseTemplate.get("order1", "lambda", (result, rowNumber) -> "test");
+        System.out.println("asdfasdf");
+        byte[] s = hbaseTemplate.get("order2", "meps",
+                (result, rowNumber) ->  result.getValue("predict".getBytes(),"1".getBytes()) );
+        System.out.println(new String(s));
     }
 
 }
