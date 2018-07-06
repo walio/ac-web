@@ -81,7 +81,6 @@ public class Gram {
         int i=0;
         RowScanner temp;
         Set<String> followings = new HashSet<>();
-            System.out.println(rowScanners.peek().current().getFollowing());
 
         while (i<this.limit){
             temp = rowScanners.peek();
@@ -98,7 +97,7 @@ public class Gram {
     }
 
     public Predict[] getPredictsByNumber(int topK) {
-        return (Predict[]) predicts.subList(0,topK).toArray();
+        return predicts.subList(0,topK).toArray(new Predict[0]);
     }
 
     public Predict[] getPredictsByProb(double totalProb) {

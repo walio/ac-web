@@ -34,11 +34,4 @@ public class ImplGramDao implements GramDao {
         return new Gram(history,backoffHistory,limit);
     }
 
-    public void test(){
-        System.out.println("asdfasdf");
-        byte[] s = hbaseTemplate.get("order2", "meps",
-                (result, rowNumber) ->  result.getValue("predict".getBytes(),"1".getBytes()) );
-        System.out.println(new String(s));
-    }
-
 }

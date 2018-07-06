@@ -16,6 +16,6 @@ public class ImplGramService implements GramService {
         for (Predict predict:gram.getPredictsByNumber(10)){
             predicts.add(predict.getFollowing());
         }
-        return (String[]) predicts.toArray();
+        return predicts.toArray(new String[0]);
     }
 }

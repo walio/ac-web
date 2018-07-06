@@ -43,13 +43,4 @@ public class ImplGramDaoTest {
         }
     }
 
-    @Test
-    public void test1() throws Exception{
-        CellScanner cs = hbaseTemplate.get("order1", " ",
-                "predict",(result, rowNumber) -> result);
-        System.out.println("@@@@@");
-        System.out.println(new String(CellUtil.cloneValue(cs.current())));
-        System.out.println("@@@@@");
-    }
-
 }

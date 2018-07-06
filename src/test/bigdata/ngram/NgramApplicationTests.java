@@ -18,7 +18,6 @@ public class NgramApplicationTests {
     @Test
     public void contextLoads() {
         ImplGramDao gramDao = new ImplGramDao();
-        gramDao.test();
     }
 
 }

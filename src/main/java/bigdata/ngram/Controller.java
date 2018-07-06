@@ -4,9 +4,9 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class Controller {
-    @RequestMapping(value = "/rest/predict/{history}",method = RequestMethod.GET,produces = "application/json")
-    public String predict(@PathVariable String history){
+    @RequestMapping(value = "/v1/predict/{history}",method = RequestMethod.GET,produces = "application/json")
+    public String[] predict(@PathVariable String history){
         ImplGramService gramService = new ImplGramService();
-        return gramService.getPredict(history)[0];
+        return gramService.getPredict(history);
     }
 }
