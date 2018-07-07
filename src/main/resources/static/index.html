@@ -7,9 +7,13 @@
 <body>
 <div id="app">
     <el-autocomplete
+            v-model="content"
             :fetch-suggestions="querySearch"
             placeholder="请输入内容"
             :trigger-on-focus="false"
+            @select="handleSelect"
+            clearable="true"
+            maxlength="20"
     ></el-autocomplete>
 </div>
 </body>
@@ -19,6 +23,11 @@
 <script>
     new Vue({
         el: "#app",
+        data(){
+            return {
+                content: ""
+            }
+        },
         methods: {
             querySearch(queryString, cb) {
                 queryString = queryString.split(/\s+/);
@@ -28,7 +37,7 @@
                 }
                 axios.get(`/v1/predict/${queryString}`).then((result)=>{
                     cb(result.data.map(
-                        following=>({"value":following})
+                        following=>({"value":this.content+" "+following})
                     ))
                 })
             }
